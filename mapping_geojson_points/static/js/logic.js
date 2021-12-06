@@ -2,35 +2,7 @@
 console.log("Feelin' fine.");
 
 // create map object with a center and zoom level
-let map = L.map('mapid').setView([37.5, -122.5], 10);
-
-// add GeoJson data
-let sanFranAirport =
-{"type":"FeatureCollection","features":[{
-    "type":"Feature",
-    "properties":{
-        "id":"3469",
-        "name":"San Francisco International Airport",
-        "city":"San Francisco",
-        "country":"United States",
-        "faa":"SFO",
-        "icao":"KSFO",
-        "alt":"13",
-        "tz-offset":"-8",
-        "dst":"A",
-        "tz":"America/Los_Angeles"},
-        "geometry":{
-            "type":"Point",
-            "coordinates":[-122.375,37.61899948120117]}}
-]};
-
-// add GeoJSON data to map
-L.geoJSON(sanFranAirport, {
-    onEachFeature: function(feature, layer) {
-        console.log(layer);
-        layer.bindPopup("<h2>" + feature.properties.city + "</h2>" + "<hr>" + "<h3>" + "Airport Name: " + feature.properties.name + "</h3>");
-    }
-    }).addTo(map);
+let map = L.map('mapid').setView([30, 30], 2);
 
 // create tile layer for the background
 let streets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v11/tiles/{z}/{x}/{y}?access_token={accessToken}', {
@@ -40,11 +12,31 @@ let streets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/satellite-str
     tileSize: 512,
     zoomOffset: -1,
     accessToken: apiKey,
-
 });
 
 // add graymap tile layer to map
 streets.addTo(map);
+
+// accesss airport geojson url
+let airportData = "https://raw.githubusercontent.com/LiShanDa2021/Mapping_Earthquakes/mapping_geojson_points/majorAirports.json"
+
+// grab geojson data
+d3.json(airportData).then(function(data) {
+
+    console.log(data);
+    // create geojson layer with retrieved data
+
+    L.geoJson(data, {
+        onEachFeature: function(feature, layer) {
+            console.log(layer);
+            layer.bindPopup("<h2>" + "Airport code: " + feature.properties.faa + "</h2>" + "<hr>" + "<h3>" + "Airport Name: " + feature.properties.name + "</h3>");
+        }
+        }).addTo(map);
+});
+
+
+// add GeoJSON data to map
+L.geoJSON(sanFranAirport).addTo(map);
 
 // old code from other branches
 
@@ -87,3 +79,31 @@ streets.addTo(map);
 //    return L.marker(latlng)
 //    .bindPopup("<h2>" + feature.properties.city + "</h2>")
 //}
+
+// add GeoJson data
+//let sanFranAirport =
+//{"type":"FeatureCollection","features":[{
+    //"type":"Feature",
+    //"properties":{
+    //   "id":"3469",
+    //    "name":"San Francisco International Airport",
+    //    "city":"San Francisco",
+    //    "country":"United States",
+    //    "faa":"SFO",
+    //    "icao":"KSFO",
+    //    "alt":"13",
+    //    "tz-offset":"-8",
+    //    "dst":"A",
+    //    "tz":"America/Los_Angeles"},
+    //    "geometry":{
+    //        "type":"Point",
+    //        "coordinates":[-122.375,37.61899948120117]}}
+//]};
+
+// add GeoJSON data to map
+//L.geoJSON(sanFranAirport, {
+//    onEachFeature: function(feature, layer) {
+//        console.log(layer);
+//        layer.bindPopup("<h2>" + feature.properties.city + "</h2>" + "<hr>" + "<h3>" + "Airport Name: " + feature.properties.name + "</h3>");
+//    }
+//    }).addTo(map);
