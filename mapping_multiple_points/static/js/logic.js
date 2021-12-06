@@ -9,6 +9,8 @@ let map = L.map('mapid').setView([34.0522, -118.2437], 4);
 
 let cityData = cities;
 
+let line = [[33.9416, -118.4085], [37.6213, -122.3790]];
+
 cityData.forEach(function(city) {
     console.log(city);
     L.circleMarker(city.location, {
