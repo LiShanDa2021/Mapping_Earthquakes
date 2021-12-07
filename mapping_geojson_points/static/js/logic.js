@@ -1,9 +1,6 @@
 // add console.log to check to see if the code works
 console.log("Feelin' fine.");
 
-// create map object with a center and zoom level
-let map = L.map('mapid').setView([30, 30], 2);
-
 // create tile layer for the background
 let streets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v11/tiles/{z}/{x}/{y}?access_token={accessToken}', {
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -14,8 +11,28 @@ let streets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/satellite-str
     accessToken: apiKey,
 });
 
-// add graymap tile layer to map
-streets.addTo(map);
+// create dark layer
+let dark = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/dark-v10/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+attribution: 'Map data © <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery (c) <a href="https://www.mapbox.com/">Mapbox</a>',
+    maxZoom: 18,
+    accessToken: apiKey
+});
+
+// create base layer to hold both maps
+let baseMaps = {
+    Street: streets,
+    Dark: dark
+}
+
+// create map object with a center and zoom level
+let map = L.map('mapid', {
+    center: [30, 30],
+    zoom: 2,
+    layers: [streets]
+});
+
+// pass map layers into layers control and add layers control
+L.control.layers(baseMaps).addTo(map);
 
 // accesss airport geojson url
 let airportData = "https://raw.githubusercontent.com/LiShanDa2021/Mapping_Earthquakes/mapping_geojson_points/majorAirports.json"
@@ -34,9 +51,22 @@ d3.json(airportData).then(function(data) {
         }).addTo(map);
 });
 
+//code i don't seem to need
 
-// add GeoJSON data to map
-L.geoJSON(sanFranAirport).addTo(map);
+// // add graymap tile layer to map
+// streets.addTo(map);
+
+// // add GeoJSON data to map
+// L.geoJSON(sanFranAirport).addTo(map);
+
+
+
+
+
+
+
+
+
 
 // old code from other branches
 
