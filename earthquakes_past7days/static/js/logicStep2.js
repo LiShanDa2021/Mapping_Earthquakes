@@ -37,33 +37,8 @@ L.control.layers(baseMaps).addTo(map);
 // accessing Toronto airline routes with GeoJSON url
 //let quakes = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson"
 
-// create an object to hold the style
-let myStyle = {
-    color: "blue",
-    fillColor: "yellow",
-    weight: 1
-}
 //grab geojson data
 d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson").then(function(data) {
-
-    function styleInfo(feature) {
-        return {
-            opacity: 1, 
-            fillOpacity: 1,
-            fillColor: "#ffae42",
-            color: "#000000",
-            radius: getRadius(),
-            stroke: true,
-            weight: .5,
-        }
-    }
-
-    function getRadius(magnitude) {
-        if (magnitude === 0) {
-            return 1;
-        }
-        return magnitude * 4;
-    }
 
     // create geojson layer with retrieved data
     L.geoJson(data, {
@@ -75,6 +50,25 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geoj
         },
       // We set the style for each circleMarker using our styleInfo function.
     }).addTo(map);
+
+    function styleInfo(feature) {
+        return {
+            opacity: 1, 
+            fillOpacity: 1,
+            fillColor: "#ffae42",
+            color: "#000000",
+            radius: getRadius(feature.properties.mag),
+            stroke: true,
+            weight: .5,
+        }
+    }
+
+    function getRadius(mag) {
+        if (mag === 0) {
+            return 1;
+        }
+        return mag * 4;
+    }
 });
 
 
@@ -180,3 +174,11 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geoj
     //         layer.bindPopup("<h3> Neighborhood: " + feature.properties.AREA_NAME);
     //     }
     // })
+
+
+// // create an object to hold the style
+// let myStyle = {
+//     color: "blue",
+//     fillColor: "yellow",
+//     weight: 1
+// }
