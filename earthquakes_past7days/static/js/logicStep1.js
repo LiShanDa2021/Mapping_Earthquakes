@@ -26,8 +26,8 @@ let baseMaps = {
 
 // create map object with a center and zoom level
 let map = L.map('mapid', {
-    center: [43.7, -79.3],
-    zoom: 11,
+    center: [39.5, -98.5],
+    zoom: 3,
     layers: [streets]
 });
 
@@ -35,7 +35,7 @@ let map = L.map('mapid', {
 L.control.layers(baseMaps).addTo(map);
 
 // accessing Toronto airline routes with GeoJSON url
-let torontoHoods = "https://raw.githubusercontent.com/LiShanDa2021/Mapping_Earthquakes/mapping_geojson_polygons/torontoNeighborhoods.json"
+//let quakes = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson"
 
 // create an object to hold the style
 let myStyle = {
@@ -44,18 +44,18 @@ let myStyle = {
     weight: 1
 }
 //grab geojson data
-d3.json(torontoHoods).then(function(data) {
+d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson").then(function(data) {
     console.log(data);
 
-    L.geoJson(data, {
-        style: myStyle,
-        onEachFeature: function(feature, layer) {
-            layer.bindPopup("<h3> Neighborhood: " + feature.properties.AREA_NAME);
-        }
-    })
+    // L.geoJson(data, {
+    //     style: myStyle,
+    //     onEachFeature: function(feature, layer) {
+    //         layer.bindPopup("<h3> Neighborhood: " + feature.properties.AREA_NAME);
+    //     }
+    // })
 
     // create geojson layer with retrieved data
-    .addTo(map);
+    L.geoJson(data).addTo(map);
         
 });
 
